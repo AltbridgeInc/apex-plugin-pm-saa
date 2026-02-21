@@ -1,0 +1,11 @@
+{
+  "id": "apex-plugin-strategy-saa",
+  "name": "Strategy SAA",
+  "version": "1.0.0",
+  "description": "Strategic Asset Allocation strategy layer. Consumes asset class forecasts and covariance matrix to produce portfolio recommendations using 16 portfolio construction methods, ensemble CIO decision, risk analysis, and rebalancing monitoring.",
+  "layer": "strategy",
+  "dependencies": ["apex-plugin-analysis-assetclass"],
+  "tags": ["strategy", "portfolio-construction", "asset-allocation", "risk-management"],
+  "author": "Apex",
+  "pluginPath": "plugin"
+}

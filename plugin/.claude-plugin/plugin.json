@@ -1,0 +1,59 @@
+{
+  "name": "strategy-saa",
+  "version": "1.0.0",
+  "description": "Strategic Asset Allocation strategy plugin. Runs 16 portfolio construction methods, ensemble CIO analysis, risk management, and rebalancing monitoring on top of analysis-assetclass outputs.",
+  "commands": [
+    {
+      "name": "construct",
+      "description": "Run portfolio construction methods (one or all 16)",
+      "file": "commands/construct.md"
+    },
+    {
+      "name": "risk",
+      "description": "Run risk analysis and stress tests on portfolio construction outputs",
+      "file": "commands/risk.md"
+    },
+    {
+      "name": "recommend",
+      "description": "Run CIO ensemble analysis and produce final portfolio recommendation",
+      "file": "commands/recommend.md"
+    },
+    {
+      "name": "rebalance",
+      "description": "Monitor rebalancing needs against a live portfolio",
+      "file": "commands/rebalance.md"
+    },
+    {
+      "name": "run",
+      "description": "Run the full SAA pipeline: construct → risk → recommend",
+      "file": "commands/run.md"
+    }
+  ],
+  "skills": [
+    "skills/portfolio-construction/SKILL.md",
+    "skills/risk-management/SKILL.md",
+    "skills/ensemble-methods/SKILL.md",
+    "skills/rebalancing/SKILL.md"
+  ],
+  "agents": [
+    "agents/portfolio-construction/pc-market-cap-weight.md",
+    "agents/portfolio-construction/pc-equal-weight.md",
+    "agents/portfolio-construction/pc-inverse-vol.md",
+    "agents/portfolio-construction/pc-inverse-variance.md",
+    "agents/portfolio-construction/pc-max-sharpe.md",
+    "agents/portfolio-construction/pc-risk-parity.md",
+    "agents/portfolio-construction/pc-global-min-variance.md",
+    "agents/portfolio-construction/pc-max-diversification.md",
+    "agents/portfolio-construction/pc-vol-targeting.md",
+    "agents/portfolio-construction/pc-minimum-correlation.md",
+    "agents/portfolio-construction/pc-hierarchical-risk-parity.md",
+    "agents/portfolio-construction/pc-robust-mean-variance.md",
+    "agents/portfolio-construction/pc-cvar.md",
+    "agents/portfolio-construction/pc-mean-downside-risk.md",
+    "agents/portfolio-construction/pc-resampled-frontier.md",
+    "agents/portfolio-construction/pc-max-drawdown-constrained.md",
+    "agents/risk-analyst.md",
+    "agents/cio.md",
+    "agents/rebalancing-monitor.md"
+  ]
+}
