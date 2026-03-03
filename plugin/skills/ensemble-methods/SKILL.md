@@ -17,13 +17,13 @@ numpy, scipy (shared with portfolio-construction skill)
 ## Input Requirements
 
 All 16 PC method outputs at:
-`.analysis/saa/YYYYMMDD/portfolio-construction/{method}/portfolio.json`
+`.db/pm/saa/YYYYMMDD/portfolio-construction/{method}/portfolio.json`
 
 Plus CMA, covariance, and macro regime (same as PC scripts).
 
 ## Outputs
 
-`.analysis/saa/YYYYMMDD/cio/`
+`.db/pm/saa/YYYYMMDD/cio/`
 ```
 final-portfolio.json         ← Recommended portfolio (machine-readable)
 method-scores.json           ← Scores for all 16 PC methods

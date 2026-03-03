@@ -1,7 +1,7 @@
 {
-  "name": "strategy-saa",
+  "name": "apex-pm-saa",
   "version": "1.0.0",
-  "description": "Strategic Asset Allocation strategy plugin. Runs 16 portfolio construction methods, ensemble CIO analysis, risk management, and rebalancing monitoring on top of analysis-assetclass outputs.",
+  "description": "Strategic Asset Allocation PM plugin. Runs 16 portfolio construction methods, ensemble CIO analysis, risk management, and rebalancing monitoring on top of analysis-assetclass outputs.",
   "commands": [
     {
       "name": "construct",
@@ -36,24 +36,6 @@
     "skills/rebalancing/SKILL.md"
   ],
   "agents": [
-    "agents/portfolio-construction/pc-market-cap-weight.md",
-    "agents/portfolio-construction/pc-equal-weight.md",
-    "agents/portfolio-construction/pc-inverse-vol.md",
-    "agents/portfolio-construction/pc-inverse-variance.md",
-    "agents/portfolio-construction/pc-max-sharpe.md",
-    "agents/portfolio-construction/pc-risk-parity.md",
-    "agents/portfolio-construction/pc-global-min-variance.md",
-    "agents/portfolio-construction/pc-max-diversification.md",
-    "agents/portfolio-construction/pc-vol-targeting.md",
-    "agents/portfolio-construction/pc-minimum-correlation.md",
-    "agents/portfolio-construction/pc-hierarchical-risk-parity.md",
-    "agents/portfolio-construction/pc-robust-mean-variance.md",
-    "agents/portfolio-construction/pc-cvar.md",
-    "agents/portfolio-construction/pc-mean-downside-risk.md",
-    "agents/portfolio-construction/pc-resampled-frontier.md",
-    "agents/portfolio-construction/pc-max-drawdown-constrained.md",
-    "agents/risk-analyst.md",
-    "agents/cio.md",
-    "agents/rebalancing-monitor.md"
+    "agents/apex-agent-pm-saa.md"
   ]
 }

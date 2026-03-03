@@ -18,14 +18,14 @@ numpy, scipy, pandas, scikit-learn (shared with portfolio-construction skill)
 
 | Required | File                                                  | Contents             |
 |----------|-------------------------------------------------------|----------------------|
-| Yes      | `.analysis/saa/YYYYMMDD/cio/final-portfolio.json`     | CIO final portfolio  |
-| Yes      | `.analysis/saa/YYYYMMDD/covariance/output/covariance-matrix.json` | Covariance |
-| Yes      | `.analysis/saa/YYYYMMDD/asset-classes/*/output/cma.json` | Expected returns |
+| Yes      | `.db/pm/saa/YYYYMMDD/cio/final-portfolio.json`     | CIO final portfolio  |
+| Yes      | `.db/analysis/assetclass/YYYYMMDD/covariance/output/covariance-matrix.json` | Covariance |
+| Yes      | `.db/analysis/assetclass/YYYYMMDD/asset-classes/*/output/cma.json` | Expected returns |
 | Fallback | Any PC method portfolio.json                          | If CIO not run yet   |
 
 ## Outputs
 
-`.analysis/saa/YYYYMMDD/risk-analysis/`
+`.db/pm/saa/YYYYMMDD/risk/`
 ```
 risk-analysis.json    ← Full machine-readable results
 risk-report.md        ← Human-readable summary report

@@ -20,10 +20,10 @@ Run comprehensive risk analysis on the final CIO portfolio (or a specified portf
 
 ## Prerequisites
 
-- `.analysis/saa/YYYYMMDD/cio/final-portfolio.json` — from `recommend` command (preferred)
-- OR `.analysis/saa/YYYYMMDD/portfolio-construction/{method}/portfolio.json` — fallback to first available PC output
-- `.analysis/saa/YYYYMMDD/covariance/output/covariance-matrix.json`
-- `.analysis/saa/YYYYMMDD/asset-classes/{slug}/output/cma.json`
+- `.db/pm/saa/YYYYMMDD/cio/final-portfolio.json` — from `recommend` command (preferred)
+- OR `.db/pm/saa/YYYYMMDD/portfolio-construction/{method}/portfolio.json` — fallback to first available PC output
+- `.db/analysis/assetclass/YYYYMMDD/covariance/output/covariance-matrix.json`
+- `.db/analysis/assetclass/YYYYMMDD/asset-classes/{slug}/output/cma.json`
 
 ## Execution
 
@@ -41,7 +41,7 @@ python plugin/skills/risk-management/scripts/risk-analysis.py --date YYYYMMDD
 
 ## Outputs
 
-`.analysis/saa/YYYYMMDD/risk-analysis/`
+`.db/pm/saa/YYYYMMDD/risk/`
 ```
 risk-analysis.json    ← Full structured results
 risk-report.md        ← Human-readable report with tables

@@ -1,0 +1,341 @@
+{
+  "methods": [
+    {
+      "method_name": "pc-market-cap-weight",
+      "display_name": "Market-Cap Weight",
+      "script_name": "pc-market-cap-weight.py",
+      "uses_returns": false,
+      "uses_covariance": false,
+      "methodology": "Construct a portfolio using approximate global market-capitalization weights for all 18 asset classes, projected to the IPS-feasible space. Serves as the passive 'what the world owns' benchmark.",
+      "key_notes": [
+        "Requires no return or covariance estimation — immune to estimation error",
+        "IPS projection will shift weights: us-large-cap minimum (10%) forces some weight away from global market cap",
+        "Best used as: ensemble anchor, diversification reference, and performance attribution baseline",
+        "In EXPANSION regimes, market-cap weight tends to have momentum exposure (recent winners overweighted)",
+        "Expected Tracking Error vs 60/40 benchmark: low-to-moderate (both are passive-tilted)"
+      ],
+      "review_flags": [
+        "Weight sum != 100%",
+        "us-large-cap not between 10-40%",
+        "intl-developed not between 5-25%",
+        "IPS compliance = false"
+      ]
+    },
+    {
+      "method_name": "pc-equal-weight",
+      "display_name": "Equal Weight (1/N)",
+      "script_name": "pc-equal-weight.py",
+      "uses_returns": false,
+      "uses_covariance": false,
+      "methodology": "Assign equal weight to each of the 18 asset classes before projecting to the IPS-feasible space.",
+      "key_notes": [
+        "Strongest possible diversification by weight count (effective N = 18 before IPS projection)",
+        "IPS minimums (us-large-cap >= 10%, intl-developed >= 5%) will pull weight from equal distribution",
+        "Consistently beats optimized portfolios out-of-sample due to estimation error immunity",
+        "In ensembles, acts as a stabilizing anchor — especially useful when model confidence is low",
+        "Best ensemble weight: should receive higher weight in RECOVERY and RECESSION when model signal is uncertain"
+      ],
+      "review_flags": [
+        "Weight sum != 100%",
+        "IPS individual bounds violated",
+        "IPS category bounds violated (especially equity 30-75%)"
+      ]
+    },
+    {
+      "method_name": "pc-inverse-vol",
+      "display_name": "Inverse Volatility",
+      "script_name": "pc-inverse-vol.py",
+      "uses_returns": false,
+      "uses_covariance": true,
+      "methodology": "Weight each asset class proportionally to 1/sigma_i (inverse of individual volatility), then project to IPS space.",
+      "key_notes": [
+        "Only uses the diagonal of the covariance matrix — cross-asset correlations are ignored",
+        "Naturally overweights fixed income (low vol) and underweights equities (high vol)",
+        "Requires IPS minimum equity constraint (us-large-cap >= 10%) to prevent equity starvation",
+        "More defensive than equal-weight; appropriate in LATE-CYCLE and RECESSION regimes",
+        "Does not require a covariance matrix inversion — numerically very stable"
+      ],
+      "review_flags": [
+        "Weight sum != 100%",
+        "IPS individual bounds violated",
+        "IPS category bounds violated (especially equity 30-75%)"
+      ]
+    },
+    {
+      "method_name": "pc-inverse-variance",
+      "display_name": "Inverse Variance",
+      "script_name": "pc-inverse-variance.py",
+      "uses_returns": false,
+      "uses_covariance": true,
+      "methodology": "Weight each asset class proportionally to 1/sigma^2_i, the inverse of individual variance, then project to IPS space.",
+      "key_notes": [
+        "Stronger defensive tilt than inverse-vol; even lower effective equity weight before IPS projection",
+        "Analytically optimal when all assets have zero pairwise correlation",
+        "Very robust to correlation estimation error precisely because it ignores correlations",
+        "IPS equity minimum (us-large-cap >= 10%) is typically binding with this method",
+        "Recommended for RECESSION regime as a defensive anchor"
+      ],
+      "review_flags": [
+        "Weight sum != 100%",
+        "IPS individual bounds violated",
+        "IPS category bounds violated (especially equity 30-75%)"
+      ]
+    },
+    {
+      "method_name": "pc-max-sharpe",
+      "display_name": "Maximum Sharpe Ratio",
+      "script_name": "pc-max-sharpe.py",
+      "uses_returns": true,
+      "uses_covariance": true,
+      "methodology": "Find the portfolio on the efficient frontier with the highest Sharpe ratio using CMA expected returns, Ledoit-Wolf shrunken covariance, and IPS constraints. Use multiple random restarts to avoid local optima.",
+      "key_notes": [
+        "Most sensitive to return estimates: small changes in mu can cause large weight shifts",
+        "Concentration risk: unconstrained max-Sharpe concentrates in 1-3 assets; IPS bounds prevent this",
+        "Regime fit: strongly preferred in EXPANSION and RECOVERY; discouraged in RECESSION",
+        "Return input quality: check that CMA expected returns are reasonable (7-11% for equities, 4-6% for bonds)",
+        "Ledoit-Wolf shrinkage: reduces estimation error in covariance; do not skip this step",
+        "Multiple restarts: essential — SLSQP is a local solver and the objective surface is non-convex"
+      ],
+      "review_flags": [
+        "Sharpe ratio < 0.20",
+        "Effective N < 3",
+        "TE vs benchmark > 7%",
+        "Any single weight at upper IPS bound"
+      ]
+    },
+    {
+      "method_name": "pc-risk-parity",
+      "display_name": "Risk Parity",
+      "script_name": "pc-risk-parity.py",
+      "uses_returns": false,
+      "uses_covariance": true,
+      "methodology": "Solve for portfolio weights where each asset contributes equally to total portfolio risk (RC_i = sigma_p / N for all i). Uses log-barrier method in unconstrained space, then projects to IPS-feasible space.",
+      "key_notes": [
+        "Bond heavy before IPS projection: unconstrained RP typically puts 50-70% in fixed income (bonds have much lower vol). The IPS equity minimum (30-75%) enforces equity allocation.",
+        "Regime robustness: RP is one of the most regime-robust methods — good in all environments",
+        "Practical note: institutional RP uses leverage to bring up equity-equivalent returns; we do not use leverage",
+        "Log-barrier optimization: more numerically stable than direct RP formulation; avoids zero-weight corner solutions",
+        "IPS projection impact: expect 5-15% reallocation from pure RP to IPS-projected RP",
+        "Historical performance: risk parity has excellent out-of-sample Sharpe across multiple decades"
+      ],
+      "review_flags": [
+        "Risk contributions not approximately equal (within ~2% deviation)",
+        "Weight sum != 100%",
+        "IPS individual bounds violated",
+        "IPS category bounds violated"
+      ]
+    },
+    {
+      "method_name": "pc-global-min-variance",
+      "display_name": "Global Min Variance",
+      "script_name": "pc-global-min-variance.py",
+      "uses_returns": false,
+      "uses_covariance": true,
+      "methodology": "Construct the global minimum variance portfolio using covariance inputs, then project to the IPS-feasible space. No expected return inputs are required.",
+      "key_notes": [
+        "Requires no return estimates — purely covariance-based",
+        "Sits at the leftmost tip of the efficient frontier",
+        "Low-volatility anomaly: historically superior Sharpe to market cap weight",
+        "IPS bounds prevent extreme concentration in lowest-vol assets (bonds/cash)",
+        "Strongly preferred in RECESSION regime"
+      ],
+      "review_flags": [
+        "Weight sum != 100%",
+        "IPS bounds violated (individual and category)",
+        "Tracking error vs benchmark >= 8%"
+      ]
+    },
+    {
+      "method_name": "pc-max-diversification",
+      "display_name": "Max Diversification",
+      "script_name": "pc-max-diversification.py",
+      "uses_returns": false,
+      "uses_covariance": true,
+      "methodology": "Maximize the diversification ratio (weighted-avg-vol / portfolio-vol) using covariance and volatility inputs, then project to IPS-feasible space.",
+      "key_notes": [
+        "Diversification Ratio = weighted-avg-vol / portfolio-vol; higher is better",
+        "Uses multiple restarts; non-convex objective",
+        "Results in well-diversified portfolios without requiring return estimates",
+        "Correlation-aware: rewards assets that are uncorrelated with the portfolio",
+        "Good across all regimes; especially useful when correlation structure is well-estimated"
+      ],
+      "review_flags": [
+        "Weight sum != 100%",
+        "IPS bounds violated (individual and category)",
+        "Tracking error vs benchmark >= 8%"
+      ]
+    },
+    {
+      "method_name": "pc-vol-targeting",
+      "display_name": "Vol Targeting",
+      "script_name": "pc-vol-targeting.py",
+      "uses_returns": false,
+      "uses_covariance": true,
+      "methodology": "Construct a volatility-targeted portfolio (10% annual vol target) using covariance inputs, then project to IPS-feasible space.",
+      "key_notes": [
+        "Targets 10% annualized portfolio volatility",
+        "When current vol exceeds target, reduces risky weights and increases cash",
+        "Cannot leverage — does not increase exposure above 1x",
+        "Cash (index 17) acts as the buffer asset",
+        "In high-volatility environments (RECESSION), this produces the most defensive allocation",
+        "Vol-targeting is regime-adaptive: same algorithm produces different portfolios as vol changes"
+      ],
+      "review_flags": [
+        "Weight sum != 100%",
+        "IPS bounds violated (individual and category)",
+        "Tracking error vs benchmark >= 8%"
+      ]
+    },
+    {
+      "method_name": "pc-minimum-correlation",
+      "display_name": "Minimum Correlation",
+      "script_name": "pc-minimum-correlation.py",
+      "uses_returns": false,
+      "uses_covariance": true,
+      "methodology": "Minimize w'Cw where C is the correlation matrix (not covariance). Normalizes out individual volatility differences — focuses purely on correlation structure.",
+      "key_notes": [
+        "Minimizes w'Cw where C is the correlation matrix (not covariance)",
+        "Normalizes out individual volatility differences — focuses purely on correlation structure",
+        "May hold high-vol assets if they are uncorrelated with everything else (e.g., commodities)",
+        "Effective N by correlation is maximized with this method",
+        "No return estimates required; correlation estimation only"
+      ],
+      "review_flags": [
+        "Weight sum != 100%",
+        "IPS bounds violated (individual and category)",
+        "Tracking error vs benchmark >= 8%"
+      ]
+    },
+    {
+      "method_name": "pc-hierarchical-risk-parity",
+      "display_name": "Hierarchical Risk Parity",
+      "script_name": "pc-hierarchical-risk-parity.py",
+      "uses_returns": false,
+      "uses_covariance": true,
+      "methodology": "Apply Lopez de Prado's (2016) HRP algorithm: cluster assets by correlation structure, reorder the covariance matrix (quasi-diagonalization), and recursively bisect the tree to allocate risk. Avoids covariance matrix inversion entirely.",
+      "key_notes": [
+        "No matrix inversion: HRP is provably more robust than CLA or MVO when N is large relative to T",
+        "Cluster linkage: single-linkage is used; produces more balanced trees than average-linkage",
+        "Quasi-diagonalization: the reordering step is critical — it determines the bisection splits",
+        "Regime robustness: one of the most robust methods across all regimes in academic literature",
+        "IPS projection impact: HRP's unconstrained solution may underweight equity; IPS minimum forces compliance",
+        "Out-of-sample: HRP consistently outperforms classical MVO out-of-sample in empirical studies",
+        "scipy.cluster: uses scipy.cluster.hierarchy.linkage and to_tree for the tree structure"
+      ],
+      "review_flags": [
+        "Cluster structure does not make intuitive sense",
+        "Weight sum != 100%",
+        "IPS bounds violated (individual and category)",
+        "Tracking error vs benchmark >= 8%"
+      ]
+    },
+    {
+      "method_name": "pc-robust-mean-variance",
+      "display_name": "Robust Mean-Variance",
+      "script_name": "pc-robust-mean-variance.py",
+      "uses_returns": true,
+      "uses_covariance": true,
+      "methodology": "Apply James-Stein shrinkage to expected returns (toward grand mean, alpha=0.5) and Ledoit-Wolf shrinkage to covariance, then solve maximum Sharpe optimization.",
+      "key_notes": [
+        "James-Stein shrinkage: mu_robust = 0.5 * mu + 0.5 * mu_bar where mu_bar is cross-sectional mean",
+        "This moderates extreme return differences between asset classes",
+        "Ledoit-Wolf on covariance ensures numerical stability",
+        "Produces more diversified portfolios than raw max-Sharpe",
+        "Suitable in EXPANSION and LATE-CYCLE (moderate trust in return estimates)"
+      ],
+      "review_flags": [
+        "Weight sum != 100%",
+        "IPS individual and category bounds violated",
+        "Tracking error > 8%",
+        "Optimization did not converge"
+      ]
+    },
+    {
+      "method_name": "pc-cvar",
+      "display_name": "CVaR (Expected Shortfall)",
+      "script_name": "pc-cvar.py",
+      "uses_returns": true,
+      "uses_covariance": true,
+      "methodology": "Minimize the 95% Expected Shortfall of the portfolio using Monte Carlo simulation (10,000 scenarios from multivariate normal). Uses Rockafellar-Uryasev framework.",
+      "key_notes": [
+        "CVaR is a coherent risk measure (unlike VaR); CVaR minimization produces risk-efficient portfolios",
+        "Computationally intensive — Monte Carlo with 10,000 scenarios",
+        "Result depends on distributional assumption (multivariate normal used here)",
+        "Strongly defensive: tilts toward short-duration bonds and cash",
+        "IPS equity minimum (30%) prevents complete flight from equities",
+        "Best regime: RECESSION"
+      ],
+      "review_flags": [
+        "Weight sum != 100%",
+        "IPS individual and category bounds violated",
+        "Tracking error > 8%",
+        "Optimization did not converge"
+      ]
+    },
+    {
+      "method_name": "pc-mean-downside-risk",
+      "display_name": "Mean-Downside Risk (Sortino-Optimal)",
+      "script_name": "pc-mean-downside-risk.py",
+      "uses_returns": true,
+      "uses_covariance": true,
+      "methodology": "Maximize the Sortino ratio using Monte Carlo scenarios (8,000 paths). Penalizes only returns below the risk-free rate (MAR), not upside variance.",
+      "key_notes": [
+        "Sortino = (E[r_p] - MAR) / sigma_downside where sigma_downside captures semi-deviation only",
+        "Does not penalize upside volatility — appropriate for asymmetric-return investors",
+        "Monte Carlo (8,000 paths) provides a reasonable estimate of semi-deviation",
+        "Less conservative than CVaR — maintains more equity exposure",
+        "Best regimes: EXPANSION, RECOVERY (when capturing upside matters)"
+      ],
+      "review_flags": [
+        "Weight sum != 100%",
+        "IPS individual and category bounds violated",
+        "Tracking error > 8%",
+        "Optimization did not converge"
+      ]
+    },
+    {
+      "method_name": "pc-resampled-frontier",
+      "display_name": "Resampled Efficient Frontier",
+      "script_name": "pc-resampled-frontier.py",
+      "uses_returns": true,
+      "uses_covariance": true,
+      "methodology": "Generate 200 bootstrap perturbations of (mu, covariance), solve max-Sharpe for each perturbation, then average the results (Michaud & Michaud 1998).",
+      "key_notes": [
+        "200 bootstrap resamplings provide stable, statistically robust averaging",
+        "Return uncertainty: modeled as normal with SE = vol/sqrt(120 months)",
+        "Covariance uncertainty: additive noise scaled by asset volatilities",
+        "Final portfolio is much more diversified than single-shot MVO",
+        "Best regimes: EXPANSION, RECOVERY (where return signal exists but confidence is moderate)",
+        "Computationally expensive compared to single-shot methods — expected ~10-30 seconds"
+      ],
+      "review_flags": [
+        "Weight sum != 100%",
+        "IPS individual and category bounds violated",
+        "Tracking error > 8%",
+        "Optimization did not converge"
+      ]
+    },
+    {
+      "method_name": "pc-max-drawdown-constrained",
+      "display_name": "Max Drawdown Constrained",
+      "script_name": "pc-max-drawdown-constrained.py",
+      "uses_returns": true,
+      "uses_covariance": true,
+      "methodology": "Maximize Sharpe ratio subject to a soft penalty constraint that limits simulated 5-year maximum drawdown to 25%. Uses Monte Carlo for MDD estimation.",
+      "key_notes": [
+        "MDD constraint is soft (penalty-based) — optimizer balances Sharpe vs drawdown",
+        "Monte Carlo with 2,000 paths over 5-year horizon estimates expected MDD",
+        "Computationally moderate — MDD cache prevents redundant computations",
+        "Results in portfolios with both good risk-adjusted return AND controlled tail losses",
+        "IPS projection applied after optimization",
+        "Best regimes: LATE-CYCLE, RECESSION"
+      ],
+      "review_flags": [
+        "Weight sum != 100%",
+        "IPS individual and category bounds violated",
+        "Tracking error > 8%",
+        "Optimization did not converge"
+      ]
+    }
+  ]
+}

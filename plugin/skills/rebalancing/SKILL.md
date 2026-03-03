@@ -19,9 +19,9 @@ numpy, scipy, pandas (shared with portfolio-construction skill)
 
 | Required | Source                                              | Contents                |
 |----------|-----------------------------------------------------|-------------------------|
-| Yes      | `.analysis/saa/YYYYMMDD/cio/final-portfolio.json`   | Target portfolio weights |
+| Yes      | `.db/pm/saa/YYYYMMDD/cio/final-portfolio.json`   | Target portfolio weights |
 | Yes      | `--portfolio PATH` (CLI arg)                        | Current live portfolio  |
-| Yes      | `.analysis/saa/YYYYMMDD/covariance/output/covariance-matrix.json` | TE calc |
+| Yes      | `.db/analysis/assetclass/YYYYMMDD/covariance/output/covariance-matrix.json` | TE calc |
 
 ## Live Portfolio Format
 
@@ -40,7 +40,7 @@ The `--portfolio` argument should point to a JSON file:
 
 ## Outputs
 
-`.analysis/saa/YYYYMMDD/rebalancing/`
+`.db/pm/saa/YYYYMMDD/rebalancing/`
 ```
 rebalancing-status.json    ← Machine-readable: triggers, trades, recommendation
 rebalancing-report.md      ← Human-readable report with tables

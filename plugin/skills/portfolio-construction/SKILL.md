@@ -68,14 +68,14 @@ Benchmark: 60% us-large-cap / 40% interm-treasury. TE max: 8%.
 
 | File                                                              | Contents                    |
 |-------------------------------------------------------------------|-----------------------------|
-| `.analysis/saa/YYYYMMDD/asset-classes/{slug}/output/cma.json`    | CMA for each asset class    |
-| `.analysis/saa/YYYYMMDD/covariance/output/covariance-matrix.json`| 18×18 covariance matrix     |
-| `.analysis/saa/YYYYMMDD/macro/macro-view.json`                   | Macro regime                |
-| `.analysis/saa/YYYYMMDD/covariance/output/historical-returns.json`| Monthly returns (optional) |
+| `.db/analysis/assetclass/YYYYMMDD/asset-classes/{slug}/output/cma.json`    | CMA for each asset class    |
+| `.db/analysis/assetclass/YYYYMMDD/covariance/output/covariance-matrix.json`| 18×18 covariance matrix     |
+| `.db/analysis/assetclass/YYYYMMDD/macro/macro-view.json`                   | Macro regime                |
+| `.db/analysis/assetclass/YYYYMMDD/covariance/output/historical-returns.json`| Monthly returns (optional) |
 
 ### Output File Locations
 
-`.analysis/saa/YYYYMMDD/portfolio-construction/{method}/`
+`.db/pm/saa/YYYYMMDD/portfolio-construction/{method}/`
 ```
 portfolio.json          ← Top-level: weights + diagnostics + backtest summary
 memo.md                 ← Methodology explanation and full weight table

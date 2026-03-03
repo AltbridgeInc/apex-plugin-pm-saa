@@ -22,8 +22,8 @@ Run one or all 16 portfolio construction methods on the analysis-assetclass outp
 ## Prerequisites
 
 The following must exist before running:
-- `.analysis/saa/YYYYMMDD/asset-classes/{slug}/output/cma.json` for all 18 slugs
-- `.analysis/saa/YYYYMMDD/covariance/output/covariance-matrix.json`
+- `.db/analysis/assetclass/YYYYMMDD/asset-classes/{slug}/output/cma.json` for all 18 slugs
+- `.db/analysis/assetclass/YYYYMMDD/covariance/output/covariance-matrix.json`
 
 These are produced by `apex-plugin-analysis-assetclass`. If they don't exist, run that plugin first.
 
@@ -58,7 +58,7 @@ done
 ## Outputs
 
 For each method, written to:
-`.analysis/saa/YYYYMMDD/portfolio-construction/{method}/`
+`.db/pm/saa/YYYYMMDD/portfolio-construction/{method}/`
 ```
 portfolio.json        ← Primary output (weights + diagnostics + backtest)
 memo.md               ← Human-readable methodology and results

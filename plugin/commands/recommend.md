@@ -21,14 +21,14 @@ final portfolio recommendation with board memo.
 ## Prerequisites
 
 At least 4 PC method outputs must exist at:
-`.analysis/saa/YYYYMMDD/portfolio-construction/{method}/portfolio.json`
+`.db/pm/saa/YYYYMMDD/portfolio-construction/{method}/portfolio.json`
 
 Run `construct` command first.
 
 Also requires:
-- `.analysis/saa/YYYYMMDD/covariance/output/covariance-matrix.json`
-- `.analysis/saa/YYYYMMDD/asset-classes/{slug}/output/cma.json`
-- `.analysis/saa/YYYYMMDD/macro/macro-view.json`
+- `.db/analysis/assetclass/YYYYMMDD/covariance/output/covariance-matrix.json`
+- `.db/analysis/assetclass/YYYYMMDD/asset-classes/{slug}/output/cma.json`
+- `.db/analysis/assetclass/YYYYMMDD/macro/macro-view.json`
 
 ## Execution
 
@@ -48,7 +48,7 @@ python plugin/skills/ensemble-methods/scripts/cio-analysis.py --date YYYYMMDD
 
 ## Outputs
 
-`.analysis/saa/YYYYMMDD/cio/`
+`.db/pm/saa/YYYYMMDD/cio/`
 ```
 final-portfolio.json          ← Machine-readable final recommendation
 method-scores.json            ← All 16 PC method scores

@@ -20,7 +20,7 @@ Compare a live portfolio against the target SAA and produce rebalancing recommen
 
 ## Prerequisites
 
-- `.analysis/saa/YYYYMMDD/cio/final-portfolio.json` — target portfolio (run `recommend` first)
+- `.db/pm/saa/YYYYMMDD/cio/final-portfolio.json` — target portfolio (run `recommend` first)
 - `--portfolio PATH` — live portfolio JSON (see format below)
 
 ## Live Portfolio Format
@@ -64,7 +64,7 @@ If no `--portfolio` is provided, the monitor compares the target vs the 60/40 be
 
 ## Outputs
 
-`.analysis/saa/YYYYMMDD/rebalancing/`
+`.db/pm/saa/YYYYMMDD/rebalancing/`
 ```
 rebalancing-status.json    ← Structured: triggers, trades, recommendation
 rebalancing-report.md      ← Human-readable drift report and trade list

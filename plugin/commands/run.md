@@ -30,9 +30,9 @@ Execute the full SAA strategy pipeline end-to-end for a given date.
 ## Prerequisites
 
 All inputs from `apex-plugin-analysis-assetclass` must exist:
-- `.analysis/saa/YYYYMMDD/asset-classes/{slug}/output/cma.json` for all 18 slugs
-- `.analysis/saa/YYYYMMDD/covariance/output/covariance-matrix.json`
-- `.analysis/saa/YYYYMMDD/macro/macro-view.json`
+- `.db/analysis/assetclass/YYYYMMDD/asset-classes/{slug}/output/cma.json` for all 18 slugs
+- `.db/analysis/assetclass/YYYYMMDD/covariance/output/covariance-matrix.json`
+- `.db/analysis/assetclass/YYYYMMDD/macro/macro-view.json`
 
 If these don't exist, run `apex-plugin-analysis-assetclass` first.
 
@@ -60,7 +60,7 @@ python plugin/skills/risk-management/scripts/risk-analysis.py --date ${DATE}
 ## Complete Output Structure After `run`
 
 ```
-.analysis/saa/YYYYMMDD/
+.db/pm/saa/YYYYMMDD/
 ├── portfolio-construction/
 │   ├── pc-market-cap-weight/
 │   │   ├── portfolio.json
@@ -76,7 +76,7 @@ python plugin/skills/risk-management/scripts/risk-analysis.py --date ${DATE}
 │   ├── ensemble-portfolios.json
 │   ├── cio-recommendation.md
 │   └── board-memo.md
-└── risk-analysis/
+└── risk/
     ├── risk-analysis.json
     └── risk-report.md
 ```
@@ -98,5 +98,5 @@ python plugin/skills/risk-management/scripts/risk-analysis.py --date ${DATE}
 After `run` completes:
 1. Review `cio/board-memo.md` for the executive summary
 2. Review `cio/cio-recommendation.md` for full analysis
-3. Review `risk-analysis/risk-report.md` for stress test results
+3. Review `risk/risk-report.md` for stress test results
 4. If implementing: run `rebalance --portfolio /path/to/live-portfolio.json` to get trade list
